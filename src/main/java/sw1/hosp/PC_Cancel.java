@@ -5,12 +5,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class PC_Cancel {
 
     @FXML
     private TextField nameField;
     @FXML
-    private TextField idField;
+    private TextField birthDateField;
 
     private Stage dialogStage;
     private boolean cancelClicked = false;
@@ -26,11 +29,15 @@ public class PC_Cancel {
     @FXML
     private void handleCancelRegistration() {
         String name = nameField.getText();
-        String idString = idField.getText();
+        String birthDateString = birthDateField.getText();
 
         if (isInputValid()) {
-            int id = Integer.parseInt(idString);
-            DatabaseUtil.deletePatient(id, name);
+            String birthDate = String.valueOf(LocalDate.parse(birthDateString, DateTimeFormatter.ISO_DATE));
+
+            int id = DatabaseUtil.getPatientID(name, birthDate);
+            ReceptionController.getInstance().removePatientById(id);
+
+
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Cancel Patient Registration");
@@ -48,19 +55,21 @@ public class PC_Cancel {
         dialogStage.close();
     }
 
+    // 입력시 값이 없는 것을 경고하기 위해 작성된 함수문
+    // 환자 이름과 생년월이 입력된 경우 true 반환, 아닐경우 false 반환 후 경고문을 출력한다.
     private boolean isInputValid() {
         String errorMessage = "";
 
         if (nameField.getText() == null || nameField.getText().isEmpty()) {
             errorMessage += "No valid name!\n";
         }
-        if (idField.getText() == null || idField.getText().isEmpty()) {
-            errorMessage += "No valid patient ID!\n";
+        if (birthDateField.getText() == null || birthDateField.getText().isEmpty()) {
+            errorMessage += "No valid birth date!\n";
         } else {
             try {
-                Integer.parseInt(idField.getText());
-            } catch (NumberFormatException e) {
-                errorMessage += "No valid patient ID (must be an integer)!\n";
+                LocalDate.parse(birthDateField.getText(), DateTimeFormatter.ISO_DATE);
+            } catch (Exception e) {
+                errorMessage += "No valid birth date. Use the format yyyy-MM-dd!\n";
             }
         }
 

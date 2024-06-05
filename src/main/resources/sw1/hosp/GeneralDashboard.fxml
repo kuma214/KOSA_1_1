@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="$CONTROLLER_NAME$"
-            prefHeight="400.0" prefWidth="600.0" >
-
-</AnchorPane>
+<TabPane xmlns:fx="http://javafx.com/fxml" fx:controller="sw1.hosp.GeneralDashboardController">
+    <tabs>
+        <Tab text="환자 접수">
+            <content>
+                <AnchorPane>
+                    <fx:include source="Reception.fxml"/>
+                </AnchorPane>
+            </content>
+        </Tab>
+        <Tab text="환자 수납">
+            <content>
+                <AnchorPane>
+                    <fx:include source="Payment.fxml"/>
+                </AnchorPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>

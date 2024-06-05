@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="sw1.hosp.PatientRegistration"
-            prefHeight="400.0" prefWidth="600.0" >
+<GridPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="sw1.hosp.PatientRegistrationController">
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
+    <hgap>10</hgap>
+    <vgap>10</vgap>
 
-</AnchorPane>
+    <Label text="Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+    <TextField fx:id="nameField" promptText="Name" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+    <Label text="Birth Date:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+    <TextField fx:id="birthDateField" promptText="YYYY-MM-DD" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+    <Label text="Gender:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <TextField fx:id="genderField" promptText="Gender" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+    <Label text="Address:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+    <TextField fx:id="addressField" promptText="Address" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+    <Label text="Contact:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+    <TextField fx:id="contactField" promptText="Contact" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+    <Button onAction="#handleRegisterPatient" text="Register" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+    <Button onAction="#handleCancel" text="Cancel" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+</GridPane>
