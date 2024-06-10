@@ -9,8 +9,8 @@ import java.time.LocalDate;
 public class DatabaseUtil {
 
     private static final String DB_URL = "jdbc:oracle:thin:@localhost:1521:xe"; // Oracle DB URL
-    private static final String DB_USER = "SCOTT"; // Oracle DB 사용자 이름
-    private static final String DB_PASSWORD = "scott"; // Oracle DB 비밀번호
+    private static final String DB_USER = "system"; // Oracle DB 사용자 이름
+    private static final String DB_PASSWORD = "oracle_4U"; // Oracle DB 비밀번호
 
     static {
         try {
@@ -64,9 +64,9 @@ public class DatabaseUtil {
             while (rs.next()) {
                 int id = rs.getInt("patient_id");
                 String name = rs.getString("patient_name");
-                String birthDate = rs.getDate("patient_date").toLocalDate().toString();
+                String birthDate = rs.getDate("patient_Birthday").toLocalDate().toString();
                 String address = rs.getString("patient_address");
-                String contact = rs.getString("patient_contact");
+                String contact = rs.getString("patient_contactNum");
                 //String department = rs.getString("department");
 
                 Patient patient = new Patient(id, name, birthDate, address, contact);
@@ -80,7 +80,7 @@ public class DatabaseUtil {
 
     // 환자 정보를 데이터베이스에 추가하는 함수문
     public static void addPatient(String name, LocalDate birthDate, String gender, String address, String contact) {
-        String query = "INSERT INTO patients (patient_name, patient_date, patient_gender, patient_address, patient_contact) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO patients (patient_name, patient_Birthday, patient_gender, patient_address, patient_contactNum) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -117,7 +117,7 @@ public class DatabaseUtil {
     // 이름과 생년월일을 받아 환자 정보를 리턴 하는 함수문
     public static Patient getPatientByNameAndBirthDate(String name, String birthDate) {
         Patient patient = null;
-        String sql = "SELECT * FROM patients WHERE patient_name = ? AND patient_date = ?";
+        String sql = "SELECT * FROM patients WHERE patient_name = ? AND patient_Birthday = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -129,7 +129,7 @@ public class DatabaseUtil {
                 if (rs.next()) {
                     int id = rs.getInt("patient_id");
                     String address = rs.getString("patient_address");
-                    String contact = rs.getString("patient_contact");
+                    String contact = rs.getString("patient_contactNum");
                     //String department = rs.getString("department");
 
                     patient = new Patient(id, name, birthDate, address, contact);
@@ -145,7 +145,7 @@ public class DatabaseUtil {
     public static int getPatientID(String name, String birthDate) {
         //Patient patient = null;
         int id = 0;
-        String sql = "SELECT * FROM patients WHERE patient_name = ? AND patient_date = ?";
+        String sql = "SELECT * FROM patients WHERE patient_name = ? AND patient_Birthday = ?";
 
         try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -223,5 +223,83 @@ public class DatabaseUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ObservableList<MedicalRecord> loadDataFromMedicalRecord(Patient patient) {
+        ObservableList<MedicalRecord> MediRecord = FXCollections.observableArrayList();
+
+
+        String query = " ";
+        String patientName = patient.getName();
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            //stmt.setString(1, "%" + search + "%");
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    int mrid = rs.getInt("medicalrecord_id");
+                    String mrdrname = rs.getString("employee_Name");
+                    String mrdate = rs.getString("record_date");
+                    String diagnosis = rs.getString("diagnosis_Name");
+                    String notes = rs.getString("notes");
+
+                    MedicalRecord medicalRecord = new MedicalRecord(mrid, patientName, mrdrname, mrdate, diagnosis, notes);
+                    MediRecord.add(medicalRecord);
+                }
+
+            }
+            }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return MediRecord;
+    }
+
+    public static ObservableList<Symptom> searchSymptom(String search){
+        ObservableList<Symptom> resultSymtom = FXCollections.observableArrayList();
+
+        String query = "select symptom_id, symptom_name from SYMPTOM WHERE symptom_name like ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, "%"+search+"%");
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    int symptomid = rs.getInt("symptom_id");
+                    String symptomname = rs.getString("symptom_name");
+
+
+                    Symptom rs_symtom = new Symptom(symptomid, symptomname);
+                    resultSymtom.add(rs_symtom);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultSymtom;
+    }
+
+    public static ObservableList<Medication> searchMedication(String search){
+        ObservableList<Medication> resultMedication = FXCollections.observableArrayList();
+
+        String query = "select medication_id, medication_name from MEDICATION WHERE medication_name like ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, "%"+search+"%");
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    int medicationid = rs.getInt("medication_id");
+                    String medicationname = rs.getString("medication_name");
+
+
+                    Medication rs_medication = new Medication(medicationid, medicationname);
+                    resultMedication.add(rs_medication);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultMedication;
     }
 }

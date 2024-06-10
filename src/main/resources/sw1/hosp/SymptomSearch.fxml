@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="437.0" prefWidth="578.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sw1.hosp.SymptomSearchController">
+    <VBox>
+        <children>
+            <HBox spacing="10">
+                <Label prefHeight="36.0" prefWidth="65.0" text="증상 검색:" textAlignment="CENTER" />
+                <TextField fx:id="searchField" prefHeight="22.0" prefWidth="440.0" />
+                <Button onAction="#handleSymptomSearch" text="Search" />
+            </HBox>
+            <TableView fx:id="resultTable" editable="true">
+                <columns>
+                    <TableColumn fx:id="symptomId" editable="false" prefWidth="110.0" text="Dis.Code">
+                        <cellValueFactory><PropertyValueFactory property="symptomId"/> </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="symptomName" editable="false" prefWidth="465.0" text="Dis.Name">
+                        <cellValueFactory><PropertyValueFactory property="symptomName"/> </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+        </children>
+    </VBox>
+</AnchorPane>

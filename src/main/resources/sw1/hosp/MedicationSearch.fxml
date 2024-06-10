@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="564.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sw1.hosp.MedicationSearchController">
+    <VBox>
+        <children>
+            <HBox spacing="10">
+                <Label prefHeight="8.0" prefWidth="65.0" text="의약품 명:" textAlignment="CENTER" />
+                <TextField fx:id="medisrcField" prefHeight="22.0" prefWidth="440.0" />
+                <Button onAction="#handleSearchMedication" text="Search" />
+            </HBox>
+            <TableView fx:id="medicationTable" editable="true">
+                <columns>
+                    <TableColumn fx:id="medicationId" editable="false" text="의약코드">
+                        <cellValueFactory><PropertyValueFactory property="medicationId" /> </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="medicationName" editable="false" prefWidth="495.0" text="품 명">
+                        <cellValueFactory><PropertyValueFactory property="medicationName" /> </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+        </children>
+    </VBox>
+</AnchorPane>
