@@ -22,6 +22,7 @@ public class PDF_printer {
 
         int Dr_id = medicalRecords.getEmployeeId();
         int Md_id = medicalRecords.getMedicalRecordId();
+        //int Dn_id = medicalRecords.getDiagnosisId();
 
         String diagnosis_name = DatabaseUtil.searchDiagnosis(Md_id);
         String docter_name = DatabaseUtil.searchDrName(Dr_id);

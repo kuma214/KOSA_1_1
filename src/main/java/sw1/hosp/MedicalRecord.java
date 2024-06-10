@@ -8,6 +8,7 @@ public class MedicalRecord {
     private int employeeId;
     private Date recordDate;
     private String recordNotes;
+    private int diagnosisId;
 
     public MedicalRecord(int mrid, String patientName, String mrdrname, String mrdate, String diagnosis, String notes) {
     }
@@ -55,5 +56,13 @@ public class MedicalRecord {
 
     public void setRecordNotes(String recordNotes) {
         this.recordNotes = recordNotes;
+    }
+
+    public int getDiagnosisId() {
+        return diagnosisId;
+    }
+
+    public void setDiagnosisId(int a) {
+        this.diagnosisId = a;
     }
 }

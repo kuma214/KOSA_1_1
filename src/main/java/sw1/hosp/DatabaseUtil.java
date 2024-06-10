@@ -260,7 +260,7 @@ public class DatabaseUtil {
     public static MedicalRecord getMedicalRecordsByPatientIdAndDate(int patientId, Date date) throws SQLException {
         MedicalRecord record = new MedicalRecord();
 
-        String sql = "SELECT medicalrecord_id, patient_id, employee_id, record_date, record_notes " +
+        String sql = "SELECT medicalrecord_id, patient_id, employee_id, record_date, record_notes, diagnosis_id " +
                 "FROM medicalRecord " +
                 "WHERE patient_id = ? AND record_date = ?";
 
@@ -280,6 +280,7 @@ public class DatabaseUtil {
                 record.setEmployeeId(resultSet.getInt("employee_id"));
                 record.setRecordDate(resultSet.getDate("record_date"));
                 record.setRecordNotes(resultSet.getString("record_notes"));
+                record.setDiagnosisId(resultSet.getInt("diagnosis_id"));
                 //medicalRecords.add(record);
             }
         }
@@ -387,7 +388,7 @@ public class DatabaseUtil {
     // Diagnosis 찾기 (PDF 프린트에 사용)
     public static String searchDiagnosis(int id){
         String name = "";
-        String query = "SELECT d.diagnosis_name FROM medicalrecorddiagnosis mrd JOIN diagnosis d ON mrd.diagnosis_id = d.diagnosis_id WHERE mrd.medicalrecord_id = ?";
+        String query = "SELECT d.diagnosis_name FROM diagnosis d JOIN medicalrecord mrd ON mrd.diagnosis_id = d.diagnosis_id WHERE mrd.medicalrecord_id = ?";
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)){
             stmt.setString(1, String.valueOf(id));
