@@ -1,67 +1,68 @@
 package sw1.hosp;
 
+import java.util.Date;
+
 public class MedicalRecord {
-    private int medicalrecordId;
-    private String patientName;
-    private String drName;
-    private String date;
-    private String diagnosisName;
-    private String notes;
+    private int medicalRecordId;
+    private int patientId;
+    private int employeeId;
+    private Date recordDate;
+    private String recordNotes;
+    private int diagnosisId;
 
-    public MedicalRecord(int medicalrecordId, String patientName, String drName, String date, String diagnosisName, String notes){
-        this.medicalrecordId = medicalrecordId;
-        this.drName = drName;
-        this.patientName = patientName;
-        this.date = date;
-        this.diagnosisName = diagnosisName;
-        this.notes = notes;
+    public MedicalRecord(int mrid, String patientName, String mrdrname, String mrdate, String diagnosis, String notes) {
     }
 
-    public int getMedicalrecordId() {
-        return medicalrecordId;
+    public MedicalRecord() {
+
     }
 
-    public void setMedicalrecordId(int medicalrecordId) {
-        this.medicalrecordId = medicalrecordId;
+    // Getters and setters
+    public int getMedicalRecordId() {
+        return medicalRecordId;
     }
 
-    public String getPatientName() {
-        return patientName;
+    public void setMedicalRecordId(int medicalRecordId) {
+        this.medicalRecordId = medicalRecordId;
     }
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
+    public int getPatientId() {
+        return patientId;
     }
 
-    public String getDrName() {
-        return drName;
+    public void setPatientId(int patientId) {
+        this.patientId = patientId;
     }
 
-    public void setDrName(String drName) {
-        this.drName = drName;
+    public int getEmployeeId() {
+        return employeeId;
     }
 
-    public String getDate() {
-        return date;
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public Date getRecordDate() {
+        return recordDate;
     }
 
-    public String getDiagnosisName() {
-        return diagnosisName;
+    public void setRecordDate(Date recordDate) {
+        this.recordDate = recordDate;
     }
 
-    public void setDiagnosisName(String diagnosisName) {
-        this.diagnosisName = diagnosisName;
+    public String getRecordNotes() {
+        return recordNotes;
     }
 
-    public String getNotes() {
-        return notes;
+    public void setRecordNotes(String recordNotes) {
+        this.recordNotes = recordNotes;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public int getDiagnosisId() {
+        return diagnosisId;
+    }
+
+    public void setDiagnosisId(int a) {
+        this.diagnosisId = a;
     }
 }
