@@ -12,7 +12,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.10.0</junit.version>
-    <itext.version>8.0.2</itext.version>
   </properties>
 
   <dependencies>
@@ -56,22 +55,6 @@
       <artifactId>javafx-fxml</artifactId>
       <version>17.0.2</version>
     </dependency>
-
-
-
-    <!-- openhtmltopdf 라이브러리 -->
-    <dependency>
-      <groupId>com.openhtmltopdf</groupId>
-      <artifactId>openhtmltopdf-core</artifactId>
-      <version>1.0.10</version>
-    </dependency>
-    <dependency>
-      <groupId>com.openhtmltopdf</groupId>
-      <artifactId>openhtmltopdf-pdfbox</artifactId>
-      <version>1.0.10</version>
-    </dependency>
-
-
 
   </dependencies>
 
