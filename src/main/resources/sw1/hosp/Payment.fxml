@@ -1,42 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.control.cell.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17.0.2-ea" fx:controller="sw1.hosp.PaymentController">
-    <VBox spacing="10" AnchorPane.bottomAnchor="10" AnchorPane.leftAnchor="10" AnchorPane.rightAnchor="10" AnchorPane.topAnchor="10">
-        <TableView fx:id="patientTable">
-            <columns>
-                <TableColumn fx:id="columnId" text="고유번호">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="id" />
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="columnName" text="이름">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="name" />
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="columnBirthDate" text="생년월일">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="birthDate" />
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="columnAddress" text="주소">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="address" />
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="columnContact" text="연락처">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="contact" />
-                    </cellValueFactory>
-                </TableColumn>
-            </columns>
-        </TableView>
-        <HBox spacing="10">
-            <Button text="환자 불러오기" onAction="#handleFild"/>
-        </HBox>
-    </VBox>
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="sw1.hosp.PaymentController">
+    <Label text="환자 수납 화면" AnchorPane.topAnchor="10" AnchorPane.leftAnchor="10"/>
 </AnchorPane>
