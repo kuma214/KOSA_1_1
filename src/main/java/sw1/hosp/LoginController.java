@@ -29,7 +29,6 @@ public class LoginController {
         String password = passwordField.getText();
 
         String userType = DatabaseUtil.authenticate(username, password);
-        DatabaseUtil.getDoctorName(username);
         System.out.println(userType);
         if (userType != null) {
             loadDashboard(userType, event);

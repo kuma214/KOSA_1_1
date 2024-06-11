@@ -28,7 +28,7 @@ public class Dr_PatientController {
     private TableColumn<Patient, String> columnContact;
 
     private ObservableList<Patient> patientList = FXCollections.observableArrayList();
-    public static Patient pt;
+
     @FXML
     private void initialize() {
         columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -45,7 +45,6 @@ public class Dr_PatientController {
             if (event.getClickCount() == 2 && !patientTable.getSelectionModel().isEmpty()) {
                 Patient selectedPatient = patientTable.getSelectionModel().getSelectedItem();
                 showPatientDetails(selectedPatient);
-
             }
         });
     }
@@ -67,8 +66,6 @@ public class Dr_PatientController {
             // Pass the selected patient to the details controller
             Dr_WorkplaceController controller = loader.getController();
             controller.setPatient(patient);
-            controller.setDoctorName(DatabaseUtil.drName);
-            controller.setStage(stage);
 
             stage.showAndWait();
         } catch (IOException e) {

@@ -17,9 +17,10 @@
                 <ButtonBar prefHeight="40.0" prefWidth="200.0">
                     <buttons>
                         <Button mnemonicParsing="false" onAction="#handleFindSymptom" text="찾기" />
+                        <Button mnemonicParsing="false" text="Button" />
                     </buttons>
                 </ButtonBar>
-                <TableView fx:id="symptom_view" nodeOrientation="LEFT_TO_RIGHT" prefHeight="291.0" prefWidth="618.0">
+                <TableView fx:id="symptom_view" nodeOrientation="LEFT_TO_RIGHT" prefHeight="400.0" prefWidth="707.0">
                     <columns>
                         <TableColumn fx:id="symptomId" prefWidth="75.0" text="증상ID">
                             <cellValueFactory>
@@ -33,22 +34,6 @@
                         </TableColumn>
                     </columns>
                 </TableView>
-            <TableView fx:id="diagnosis_view" prefHeight="129.0" prefWidth="618.0">
-              <columns>
-                  <TableColumn fx:id="diagnosis_id" prefWidth="109.66668701171875" text="질병코드">
-                  <cellValueFactory><PropertyValueFactory property="diagnosis_id" /> </cellValueFactory>
-                  </TableColumn>
-                  <TableColumn fx:id="diagnosis_name" prefWidth="428.66668701171875" text="진단명">
-                      <cellValueFactory><PropertyValueFactory property="diagnosis_name" /> </cellValueFactory>
-                  </TableColumn>
-                  <TableColumn prefWidth="76.6666259765625">
-                     <graphic>
-                        <Button mnemonicParsing="false" onAction="#handleFindDiagnosis" prefHeight="22.0" prefWidth="75.0" text="찾기" />
-                     </graphic>
-                  </TableColumn>
-              </columns>
-            </TableView>
-                <TextField fx:id="textDescription" />
                 <Label text="처방">
                     <font>
                         <Font size="16.0" />
@@ -57,6 +42,7 @@
                 <ButtonBar prefHeight="22.0" prefWidth="650.0">
                     <buttons>
                         <Button mnemonicParsing="false" onAction="#handleFindMedication" text="찾기" />
+                        <Button mnemonicParsing="false" text="Button" />
                     </buttons>
                 </ButtonBar>
                 <TableView fx:id="medication_view" prefHeight="400.0" prefWidth="618.0">
@@ -69,7 +55,7 @@
                         </TableColumn>
                         <TableColumn editable="true" prefWidth="109.0" text="횟수">
                             <cellValueFactory>
-                                <PropertyValueFactory property="medication_dosage" />
+                                <PropertyValueFactory property="madication_dosage" />
                             </cellValueFactory>
                         </TableColumn>
                         <TableColumn editable="true" prefWidth="107.0" text="일수">
@@ -85,8 +71,8 @@
     <bottom>
         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <buttons>
-                <Button mnemonicParsing="false" onAction="#InsertMedicalRecord" text="저장" />
-                <Button mnemonicParsing="false" onAction="#cancelhandle" text="취소" />
+                <Button mnemonicParsing="false" text="Button" />
+                <Button mnemonicParsing="false" text="Button" />
             </buttons>
         </ButtonBar>
     </bottom>
@@ -116,7 +102,7 @@
                         <TextField fx:id="name" GridPane.columnIndex="1" />
                         <TextField fx:id="birthDate" prefHeight="17.0" prefWidth="426.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="담당의" GridPane.rowIndex="2" />
-                        <TextField fx:id="textdrname" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="drname" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="address" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label text="주소" GridPane.rowIndex="3" />
                         <Label text="연락처" GridPane.rowIndex="4" />
@@ -131,19 +117,19 @@
                 <TableView fx:id="medicalrecord_view" prefHeight="617.0" prefWidth="632.0">
                     <columns>
                         <TableColumn fx:id="medicalrecordId" prefWidth="70.33332824707031" text="진료ID">
-                            <cellValueFactory><PropertyValueFactory property="medicalrecordId" /></cellValueFactory>
+                            <cellValueFactory><PropertyValueFactory property="medicalrecordId"/></cellValueFactory>
                         </TableColumn>
                         <TableColumn fx:id="diagnosisName" prefWidth="152.66665649414062" text="병명">
-                            <cellValueFactory><PropertyValueFactory property="diagnosisName" /> </cellValueFactory>
+                            <cellValueFactory><PropertyValueFactory property="diagnosisName"/> </cellValueFactory>
                         </TableColumn>
                         <TableColumn fx:id="notes" prefWidth="203.66665649414062" text="소견">
-                            <cellValueFactory><PropertyValueFactory property="notes" /> </cellValueFactory>
+                            <cellValueFactory><PropertyValueFactory property="notes"/> </cellValueFactory>
                         </TableColumn>
                         <TableColumn fx:id="date" prefWidth="107.66668701171875" text="일시">
-                            <cellValueFactory><PropertyValueFactory property="date" /> </cellValueFactory>
+                            <cellValueFactory><PropertyValueFactory property="date"/> </cellValueFactory>
                         </TableColumn>
                         <TableColumn fx:id="drName" minWidth="0.0" prefWidth="96.66668701171875" text="담당의">
-                            <cellValueFactory><PropertyValueFactory property="drName" /> </cellValueFactory>
+                            <cellValueFactory><PropertyValueFactory property="drName"/> </cellValueFactory>
                         </TableColumn>
 
                     </columns>
