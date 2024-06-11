@@ -427,7 +427,7 @@ public class DatabaseUtil {
 
             while (resultSet.next()) {
                 //MedicalRecord record = new MedicalRecord();
-                record.setMedicalRecordId(resultSet.getInt("medicalrecord_id"));
+                record.setMedicalrecordId(resultSet.getInt("medicalrecord_id"));
                 record.setPatientId(resultSet.getInt("patient_id"));
                 record.setEmployeeId(resultSet.getInt("employee_id"));
                 record.setRecordDate(resultSet.getDate("record_date"));
