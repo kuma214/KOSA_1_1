@@ -66,6 +66,9 @@ public class Dr_PatientController {
             // Pass the selected patient to the details controller
             Dr_WorkplaceController controller = loader.getController();
             controller.setPatient(patient);
+            controller.setDoctorName(DatabaseUtil.drName);
+            controller.setStage(stage);
+
 
             stage.showAndWait();
         } catch (IOException e) {

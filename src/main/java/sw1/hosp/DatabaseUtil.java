@@ -11,10 +11,12 @@ import java.util.List;
 public class DatabaseUtil {
 
     // 일부러 2개 써놨습니다. 접속 하는 쪽에 따라서 적당히 바꿔서 주석 처리하고 사용합시다.
-    private static final String DB_URL = "jdbc:oracle:thin:@124.56.164.48:11521:xe"; // Oracle DB URL
-    //private static final String DB_URL = "jdbc:oracle:thin:@localhost:1521:xe"; // Oracle DB URL
+    //private static final String DB_URL = "jdbc:oracle:thin:@124.56.164.48:11521:xe"; // Oracle DB URL
+    private static final String DB_URL = "jdbc:oracle:thin:@localhost:1521:xe"; // Oracle DB URL
     private static final String DB_USER = "system"; // Oracle DB 사용자 이름
     private static final String DB_PASSWORD = "oracle_4U"; // Oracle DB 비밀번호
+    public static String drName;
+    public static int medical_id;
 
     static {
         try {
@@ -167,7 +169,28 @@ public class DatabaseUtil {
         }
         return id;
     }
+    //환자id 추출 오버라이딩 - 김범철
+    public static int getPatientID(String name) {
+        //Patient patient = null;
+        int id = 0;
+        String sql = "SELECT * FROM patients WHERE patient_name = ?";
 
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, name);
+
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    id = rs.getInt("patient_id");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
     // 리스트 기억용
     public static void addIDlist(Patient patient) {
         int id = 0;
@@ -253,31 +276,59 @@ public class DatabaseUtil {
         }
         return prescriptionDates;
     }
+    //의사이름으로 의사id 불러오기
+    public static int getDoctorID(String name) {
+        //Patient patient = null;
+        int id = 0;
+        String sql = "SELECT * FROM employees WHERE name = ?";
 
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, name);
+
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    id = rs.getInt("employee_id");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
 
     public static ObservableList<MedicalRecord> loadDataFromMedicalRecord(Patient patient) {
         ObservableList<MedicalRecord> MediRecord = FXCollections.observableArrayList();
 
 
-        String query = " ";
+        String query = "select m.medicalrecord_id, m.record_date, m.record_notes,m.record_date, e.name, d.diagnosis_name" +
+                " from medicalrecord m" +
+                " join patients p on m.patient_id = p.patient_id" +
+                " join employees e on m.employee_id = e.employee_id" +
+                " join diagnosis d on m.diagnosis_id = d.diagnosis_id" +
+                " where p.patient_name = ? ";
+
         String patientName = patient.getName();
+
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-            //stmt.setString(1, "%" + search + "%");
+            stmt.setString(1,patientName);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     int mrid = rs.getInt("medicalrecord_id");
-                    String mrdrname = rs.getString("employee_Name");
+                    String mrdrname = rs.getString("name");
                     String mrdate = rs.getString("record_date");
                     String diagnosis = rs.getString("diagnosis_Name");
-                    String notes = rs.getString("notes");
+                    String notes = rs.getString("record_notes");
 
                     MedicalRecord medicalRecord = new MedicalRecord(mrid, patientName, mrdrname, mrdate, diagnosis, notes);
                     MediRecord.add(medicalRecord);
                 }
-
+                System.out.println("break");
             }
-            }catch (SQLException e) {
+        }catch (SQLException e) {
             e.printStackTrace();
         }
         return MediRecord;
@@ -332,7 +383,90 @@ public class DatabaseUtil {
 
         return resultMedication;
     }
+    public static ObservableList<Diagnosis> searchDiagnosis(String search){
+        ObservableList<Diagnosis> resultDiagnosis = FXCollections.observableArrayList();
 
+        String query = "select diagnosis_id, diagnosis_name from diagnosis WHERE diagnosis_name like ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, "%"+search+"%");
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    int diagnosis_id = rs.getInt("diagnosis_id");
+                    String diagnosis_name = rs.getString("diagnosis_name");
+
+
+                    Diagnosis rs_medication = new Diagnosis(diagnosis_id, diagnosis_name);
+                    resultDiagnosis.add(rs_medication);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return resultDiagnosis;
+    }
+    public static void getDoctorName(String username)
+    {
+        String query = "select name from employees where username = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, username);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    drName = rs.getString("name");
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void setInsertRecord(String doctor, int diagId, String patient, LocalDate date, String description)
+    {
+        String query = "insert into medicalrecord(patient_id, employee_id, diagnosis_id, record_date, record_notes) values (?,?,?,?,?)";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1,getPatientID(patient));
+            stmt.setInt(2,getDoctorID(doctor));
+            stmt.setInt(3,diagId);
+            stmt.setDate(4,Date.valueOf(date));
+            stmt.setString(5,description);
+            stmt.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        String query2 = "SELECT * FROM (SELECT * FROM medicalrecord ORDER BY medicalrecord_id DESC) WHERE ROWNUM = 1";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query2)) {
+            //stmt.setDate(1,Date.valueOf(date));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    medical_id = rs.getInt("medicalrecord_id");
+                }
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void setMedicalRecordMedication(int[] array)
+    {
+        String query = "insert into medicalrecordmedication(medicalrecord_id, medication_id) values (?,?)";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            for(int i=0; i<array.length; i++) {
+                stmt.setInt(1, medical_id);
+                stmt.setInt(2, array[i]);
+                stmt.executeUpdate();
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     // id를 통해 의사 이름을 찾는 메소드 (PDF 프린트에 사용)
     public static String searchDrName(int id){
         String name = "";
@@ -435,6 +569,7 @@ public class DatabaseUtil {
                 record.setRecordNotes(resultSet.getString("record_notes"));
                 record.setDiagnosisId(resultSet.getInt("diagnosis_id"));
                 //medicalRecords.add(record);
+
             }
         }
 

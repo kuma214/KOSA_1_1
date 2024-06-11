@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="436.0" prefWidth="571.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sw1.hosp.DiagnosisSearchController">
+    <VBox>
+        <children>
+            <HBox spacing="10">
+                <Label prefHeight="27.0" prefWidth="65.0" text="병명:" textAlignment="CENTER" />
+                <TextField fx:id="searchDiag" prefHeight="22.0" prefWidth="440.0" />
+                <Button onAction="#handleDiagnosisSearch" text="Search" />
+            </HBox>
+            <TableView fx:id="diagnosis_view" editable="true">
+                <columns>
+                    <TableColumn fx:id="diagnosis_id" editable="false" prefWidth="110.0" text="질병코드">
+                        <cellValueFactory><PropertyValueFactory property="diagnosis_id" /> </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="diagnosis_name" editable="false" prefWidth="465.0" text="진단명">
+                        <cellValueFactory><PropertyValueFactory property="diagnosis_name" /> </cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+        </children>
+    </VBox>
+</AnchorPane>
