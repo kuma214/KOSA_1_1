@@ -1,12 +1,12 @@
 package sw1.hosp;
 
 public class MedicalRecord {
-    private int medicalrecordId;
-    private String patientName;
-    private String drName;
-    private String date;
-    private String diagnosisName;
-    private String notes;
+    private int medicalRecordId;
+    private int patientId;
+    private int employeeId;
+    private Date recordDate;
+    private String recordNotes;
+
 
     public MedicalRecord(int medicalrecordId, String patientName, String drName, String date, String diagnosisName, String notes){
         this.medicalrecordId = medicalrecordId;
@@ -59,9 +59,5 @@ public class MedicalRecord {
 
     public String getNotes() {
         return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 }
