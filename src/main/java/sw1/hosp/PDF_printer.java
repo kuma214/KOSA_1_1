@@ -13,8 +13,6 @@ public class PDF_printer {
 
     public static void printPDF(Patient patient, Date date) throws SQLException {
 
-
-
         String patient_name = patient.getName();
         String patient_callNUM = patient.getContact();
 

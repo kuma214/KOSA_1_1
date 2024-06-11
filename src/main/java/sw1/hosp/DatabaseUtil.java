@@ -254,37 +254,6 @@ public class DatabaseUtil {
         return prescriptionDates;
     }
 
-    // 환자 ID, 진료 기록 날자를 통해 진료 기록 전부 가져오는 메소드
-    public static MedicalRecord getMedicalRecordsByPatientIdAndDate(int patientId, Date date) throws SQLException {
-        MedicalRecord record = new MedicalRecord();
-
-        String sql = "SELECT medicalrecord_id, patient_id, employee_id, record_date, record_notes " +
-                "FROM medicalRecord " +
-                "WHERE patient_id = ? AND record_date = ?";
-
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            //System.out.println(Date.valueOf(date));
-            pstmt.setInt(1, patientId);
-            pstmt.setDate(2, date);
-
-            ResultSet resultSet = pstmt.executeQuery();
-
-            while (resultSet.next()) {
-                //MedicalRecord record = new MedicalRecord();
-                record.setMedicalRecordId(resultSet.getInt("medicalrecord_id"));
-                record.setPatientId(resultSet.getInt("patient_id"));
-                record.setEmployeeId(resultSet.getInt("employee_id"));
-                record.setRecordDate(resultSet.getDate("record_date"));
-                record.setRecordNotes(resultSet.getString("record_notes"));
-                //medicalRecords.add(record);
-            }
-        }
-
-        return record;
-    }
-
 
     public static ObservableList<MedicalRecord> loadDataFromMedicalRecord(Patient patient) {
         ObservableList<MedicalRecord> MediRecord = FXCollections.observableArrayList();
@@ -385,7 +354,7 @@ public class DatabaseUtil {
     // Diagnosis 찾기 (PDF 프린트에 사용)
     public static String searchDiagnosis(int id){
         String name = "";
-        String query = "SELECT d.diagnosis_name FROM medicalrecorddiagnosis mrd JOIN diagnosis d ON mrd.diagnosis_id = d.diagnosis_id WHERE mrd.medicalrecord_id = ?";
+        String query = "SELECT d.diagnosis_name FROM diagnosis d JOIN medicalrecord mrd ON mrd.diagnosis_id = d.diagnosis_id WHERE mrd.medicalrecord_id = ?";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)){
@@ -459,7 +428,7 @@ public class DatabaseUtil {
 
             while (resultSet.next()) {
                 //MedicalRecord record = new MedicalRecord();
-                record.setMedicalrecordId(resultSet.getInt("medicalrecord_id"));
+                record.setMedicalRecordId(resultSet.getInt("medicalrecord_id"));
                 record.setPatientId(resultSet.getInt("patient_id"));
                 record.setEmployeeId(resultSet.getInt("employee_id"));
                 record.setRecordDate(resultSet.getDate("record_date"));
