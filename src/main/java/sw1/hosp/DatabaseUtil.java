@@ -5,10 +5,14 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseUtil {
 
-    private static final String DB_URL = "jdbc:oracle:thin:@localhost:1521:xe"; // Oracle DB URL
+    // 일부러 2개 써놨습니다. 접속 하는 쪽에 따라서 적당히 바꿔서 주석 처리하고 사용합시다.
+    private static final String DB_URL = "jdbc:oracle:thin:@124.56.164.48:11521:xe"; // Oracle DB URL
+    //private static final String DB_URL = "jdbc:oracle:thin:@localhost:1521:xe"; // Oracle DB URL
     private static final String DB_USER = "system"; // Oracle DB 사용자 이름
     private static final String DB_PASSWORD = "oracle_4U"; // Oracle DB 비밀번호
 
@@ -225,6 +229,31 @@ public class DatabaseUtil {
         }
     }
 
+    // 환자 목록을 통해 진료 기록 날자만 가져오는 메소드
+    public static List<Date> getPatientMedicalRecord(Patient patient) {
+        //Patient patient = null;
+        List<Date> prescriptionDates = new ArrayList<>();
+        int id = patient.getId();
+        System.out.println(patient.getId());
+        String sql = "SELECT record_date FROM medicalrecord WHERE patient_id = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    Date date = rs.getDate("record_date");
+                    prescriptionDates.add(date);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return prescriptionDates;
+    }
+
     public static ObservableList<MedicalRecord> loadDataFromMedicalRecord(Patient patient) {
         ObservableList<MedicalRecord> MediRecord = FXCollections.observableArrayList();
 
@@ -301,5 +330,113 @@ public class DatabaseUtil {
         }
 
         return resultMedication;
+    }
+
+    // id를 통해 의사 이름을 찾는 메소드 (PDF 프린트에 사용)
+    public static String searchDrName(int id){
+        String name = "";
+        String query = "SELECT name FROM employees WHERE employee_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, String.valueOf(id));
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    name = rs.getString("name");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
+
+    // Diagnosis 찾기 (PDF 프린트에 사용)
+    public static String searchDiagnosis(int id){
+        String name = "";
+        //String query = "SELECT d.diagnosis_name FROM medicalrecorddiagnosis mrd JOIN diagnosis d ON mrd.diagnosis_id = d.diagnosis_id WHERE mrd.medicalrecord_id = ?";
+        String query = "SELECT d.diagnosis_name FROM diagnosis d JOIN medicalrecord mrd ON mrd.diagnosis_id = d.diagnosis_id WHERE mrd.medicalrecord_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, String.valueOf(id));
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    name += rs.getString("diagnosis_name");
+                    name += "\n";
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
+
+    // 의약품 이름 찾기 (PDF 프린트에 사용)
+    public static String searchMedicationName(int id){
+        String name = "";
+        String query = "SELECT d.medication_name FROM medicalrecordmedication mr JOIN medication d ON mr.medication_id = d.medication_id WHERE mr.medicalrecord_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, String.valueOf(id));
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    name += rs.getString("medication_name");
+                    name += "\n";
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
+
+    // 의약품 용량 찾기 (PDF 프린트에 사용)
+    public static String searchMedicationDosage(int id){
+        String name = "";
+        String query = "SELECT medication_dosage FROM medicalrecordmedication WHERE medicalrecordmedication.medicalrecord_id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setString(1, String.valueOf(id));
+            try(ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    name += rs.getString("medication_dosage");
+                    name += "\n";
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return name;
+    }
+
+    public static MedicalRecord getMedicalRecordsByPatientIdAndDate(int patientId, Date date) throws SQLException {
+        MedicalRecord record = new MedicalRecord();
+
+        //String sql = "SELECT medicalrecord_id, patient_id, employee_id, record_date, record_notes " +
+        String sql = "SELECT medicalrecord_id, patient_id, employee_id, record_date, record_notes, diagnosis_id " +
+                "FROM medicalRecord " +
+                "WHERE patient_id = ? AND record_date = ?";
+
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            //System.out.println(Date.valueOf(date));
+            pstmt.setInt(1, patientId);
+            pstmt.setDate(2, date);
+
+            ResultSet resultSet = pstmt.executeQuery();
+
+            while (resultSet.next()) {
+                //MedicalRecord record = new MedicalRecord();
+                record.setMedicalRecordId(resultSet.getInt("medicalrecord_id"));
+                record.setPatientId(resultSet.getInt("patient_id"));
+                record.setEmployeeId(resultSet.getInt("employee_id"));
+                record.setRecordDate(resultSet.getDate("record_date"));
+                record.setRecordNotes(resultSet.getString("record_notes"));
+                record.setDiagnosisId(resultSet.getInt("diagnosis_id"));
+                //medicalRecords.add(record);
+            }
+        }
+
+        return record;
     }
 }
