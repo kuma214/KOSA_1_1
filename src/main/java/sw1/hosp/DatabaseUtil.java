@@ -266,7 +266,8 @@ public class DatabaseUtil {
             pstmt.setInt(1, id);
 
             try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
+
+                while (rs.next()) {
                     Date date = rs.getDate("record_date");
                     prescriptionDates.add(date);
                 }
